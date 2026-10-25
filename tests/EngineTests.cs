@@ -41,9 +41,18 @@ static class EngineTests
         Check("yozuv", input, expected, Type(input));
     }
 
-    static int Main()
+    static int Main(string[] args)
     {
         Console.OutputEncoding = Encoding.UTF8;
+
+        // web/imlo.js bilan umumiy holatlar.
+        foreach (string line in System.IO.File.ReadAllLines(args[0], Encoding.UTF8))
+        {
+            if (line.Length == 0 || line[0] == '#') continue;
+            string[] parts = line.Split('\t');
+            string input = parts[0].Replace("\\n", "\n"), expected = parts[1].Replace("\\n", "\n");
+            Check("tsv", input, expected, Imlo.Convert(input));
+        }
 
         Both("salom", "salom");
         Both("shahar", "şahar");

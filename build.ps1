@@ -25,7 +25,9 @@ Run 'Test: tartib (WOW64)' {
 }
 Run 'Test: imlo qoidalari' {
     & $csc /nologo /out:"$build\tests\EngineTests.exe" "$root\tests\EngineTests.cs" "$root\app\Imlo.cs" "$root\app\TypingEngine.cs"
-    & "$build\tests\EngineTests.exe" | Select-Object -Last 1
+    & "$build\tests\EngineTests.exe" "$root\tests\imlo-cases.tsv" | Select-Object -Last 1
+    if ($LASTEXITCODE -ne 0) { return }
+    node "$root\tests\imlo.test.js"
 }
 
 Run 'Test: SendInput tuzilmasi' {
@@ -51,4 +53,11 @@ if (-not $iscc) {
     exit 0
 }
 Run "O'rnatuvchi" { & $iscc /Q "$root\installer\setup.iss" }
-Get-ChildItem "$root\dist\*.exe" | ForEach-Object { Write-Host "Tayyor: $($_.FullName)" -ForegroundColor Green }
+$setup = Get-ChildItem "$root\dist\*-setup.exe" | Sort-Object LastWriteTime | Select-Object -Last 1
+Write-Host "Tayyor: $($setup.FullName)" -ForegroundColor Green
+
+# Sayt: web\ + oxirgi o'rnatuvchi -> build\site\ (GitHub Pages'ga shu papka yuklanadi)
+Remove-Item -Recurse -Force "$build\site" -ErrorAction SilentlyContinue
+Copy-Item -Recurse "$root\web" "$build\site"
+Copy-Item $setup.FullName "$build\site\UzKlaviatura-setup.exe"
+Write-Host "Sayt: $build\site" -ForegroundColor Green

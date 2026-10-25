@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UzKlaviatura — yangi alifbo</title>
+  <meta name="description" content="Yangi özbek alifbosi (Ö, Ğ, Ş, Ç) uçun bepul klaviatura, yordamçi dastur va onlayn konvertor.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="brand" href="#"><span class="logo" aria-hidden="true">Ş</span> UzKlaviatura</a>
+      <nav>
+        <a href="#konvertor">Konvertor</a>
+        <a href="#alifbo">Alifbo</a>
+        <a href="#klaviatura">Klaviatura</a>
+        <a class="nav-cta" href="#yuklab-olish">Yuklab oliş</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">2027-yil 22-apreldan kuçga kiradi</p>
+        <h1>Yangi alifboda oson yozing</h1>
+        <p class="lead">Ö, Ğ, Ş, Ç harflari uçun klaviatura va eski odat bilan yozganingizni özi
+          töğrilaydigan yordamçi. Bepul, internet va server kerak emas.</p>
+        <div class="actions">
+          <a class="btn primary" href="#yuklab-olish">Windows uçun yuklab oliş</a>
+          <a class="btn" href="#konvertor">Matnni ögiriş</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="konvertor" class="section">
+      <div class="wrap">
+        <h2>Konvertor</h2>
+        <p class="muted">Eski lotin yozuvidagi matnni qöying, natija darhol çiqadi. Matn heç qayerga yuborilmaydi:
+          hammasi brauzeringizda bajariladi.</p>
+        <div class="converter">
+          <label class="pane">
+            <span class="pane-title">Eski yozuv</span>
+            <textarea id="input" spellcheck="false" placeholder="Masalan: O'zbekiston — go'zal yurt, shaharlari chiroyli."></textarea>
+          </label>
+          <div class="pane">
+            <span class="pane-title">Yangi alifbo <span id="count" class="badge" hidden></span></span>
+            <div id="output" class="output" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="toolbar">
+          <button class="btn primary" id="copy" type="button">Nusxa oliş</button>
+          <button class="btn" id="example" type="button">Misol</button>
+          <button class="btn" id="clear" type="button">Tozalaş</button>
+          <span id="status" class="muted" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="alifbo" class="section alt">
+      <div class="wrap">
+        <h2>Yangi alifbo: 28 harf va tutuq belgisi</h2>
+        <p class="muted">Özgargan harflar ajratib körsatilgan. Ng endi alohida harf emas, C harfi alifboda yöq.</p>
+        <div id="alphabet" class="alphabet"></div>
+        <p class="source">Manba: <a href="https://lex.uz/docs/8548754" rel="noopener">OʻRQ-1184-son Qonun, 21.10.2026</a></p>
+      </div>
+    </section>
+
+    <section id="klaviatura" class="section">
+      <div class="wrap">
+        <h2>Klaviatura</h2>
+        <div class="tabs" role="tablist">
+          <button role="tab" class="tab" aria-selected="true" data-variant="main">Özbek (yangi alifbo)</button>
+          <button role="tab" class="tab" aria-selected="false" data-variant="us">Özbek (yangi alifbo, US)</button>
+        </div>
+        <p id="variant-note" class="muted"></p>
+        <div id="keyboard" class="keyboard" aria-label="Klaviatura sxemasi"></div>
+        <ul class="legend">
+          <li><span class="k k-new">ş</span> bir bosişda</li>
+          <li><span class="k k-altgr">ş</span> AltGr (öng Alt) bilan</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="wrap">
+        <h2>Yangi alifbo yordamçisi</h2>
+        <div class="features">
+          <div class="feature">
+            <h3>Odatingizni özgartirmang</h3>
+            <p><code>sh</code>, <code>ch</code>, <code>o'</code>, <code>g'</code> deb yozavering: yordamçi ularni
+              yozayotgan paytingizda ş, ç, ö, ğ ga almaştiradi. <code>ma'no</code> → maʼno.</p>
+          </div>
+          <div class="feature">
+            <h3>Bitta tugma bilan bekor qiliş</h3>
+            <p>Almaştiriş kerak bölmasa (masalan inglizça söz), darhol Backspace bosing: «sh» qaytadi.</p>
+          </div>
+          <div class="feature">
+            <h3>Faqat kerakli joyda</h3>
+            <p>Faqat özbek klaviaturasida işlaydi. Ingliz yoki rus tilida yozganingizda heç narsaga tegmaydi.</p>
+          </div>
+          <div class="feature">
+            <h3>Butun matnni ögiriş</h3>
+            <p>Matnni nusxalang, tray menyusidan «Buferdagi matnni ögiriş»ni bosing va qayta qöying.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="yuklab-olish" class="section">
+      <div class="wrap download">
+        <div>
+          <h2>Yuklab oliş</h2>
+          <p>Klaviatura tartiblari va yordamçi bitta örnatuvçida. Windows 10 va 11 (64-bit).</p>
+          <a class="btn primary big" href="UzKlaviatura-setup.exe" download>UzKlaviatura-setup.exe yuklab oliş</a>
+        </div>
+        <ol class="steps">
+          <li>Faylni işga tuşiring. Windows «protected your PC» desa, <b>More info → Run anyway</b> ni bosing.</li>
+          <li>Örnatilgaç, <kbd>Win</kbd> + <kbd>Probel</kbd> bilan «Özbek (yangi alifbo)» ni tanlang.</li>
+          <li>Odatdagidek yozing. Yordamçini tray belgisini bosib yoqiş yoki öçiriş mumkin.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">UzKlaviatura · bepul va oçiq loyiha</div>
+  </footer>
+
+  <script src="imlo.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

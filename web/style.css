@@ -1,0 +1,177 @@
+:root {
+  --bg: #fbfaf7;
+  --bg-alt: #f2f0ea;
+  --surface: #ffffff;
+  --text: #1d2321;
+  --muted: #5d6662;
+  --border: #dedad0;
+  --accent: #00875a;
+  --accent-ink: #ffffff;
+  --accent-soft: #d9f0e6;
+  --altgr: #3b5bdb;
+  --altgr-soft: #e3e9ff;
+  --mark: #fff1b8;
+  --shadow: 0 1px 2px rgba(20, 30, 25, .06), 0 4px 16px rgba(20, 30, 25, .05);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121615;
+    --bg-alt: #181d1b;
+    --surface: #1d2321;
+    --text: #e8ece9;
+    --muted: #9aa5a0;
+    --border: #2f3834;
+    --accent: #2fbf86;
+    --accent-ink: #0b1a13;
+    --accent-soft: #163a2b;
+    --altgr: #8ea5ff;
+    --altgr-soft: #1f2a4d;
+    --mark: #5a4a12;
+    --shadow: none;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #121615; --bg-alt: #181d1b; --surface: #1d2321; --text: #e8ece9; --muted: #9aa5a0;
+  --border: #2f3834; --accent: #2fbf86; --accent-ink: #0b1a13; --accent-soft: #163a2b;
+  --altgr: #8ea5ff; --altgr-soft: #1f2a4d; --mark: #5a4a12; --shadow: none; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+}
+
+a { color: var(--accent); }
+
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+
+/* Sarlavha */
+.top {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.top-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text); text-decoration: none; }
+.logo {
+  display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--accent); color: var(--accent-ink); font-weight: 800;
+}
+nav { display: flex; gap: 20px; align-items: center; }
+nav a { color: var(--muted); text-decoration: none; font-size: 15px; }
+nav a:hover { color: var(--text); }
+nav .nav-cta { color: var(--accent); font-weight: 600; }
+
+/* Bosh qism */
+.hero { padding: 72px 0 56px; }
+.eyebrow { color: var(--accent); font-weight: 600; margin: 0 0 8px; }
+h1 { font-size: clamp(32px, 6vw, 52px); line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; }
+.lead { font-size: 19px; color: var(--muted); max-width: 640px; margin: 0 0 28px; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.section { padding: 56px 0; }
+.section.alt { background: var(--bg-alt); }
+h2 { font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em; }
+h3 { font-size: 17px; margin: 0 0 6px; }
+.muted { color: var(--muted); }
+.source { font-size: 14px; color: var(--muted); margin-top: 20px; }
+
+/* Tugmalar */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 18px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text); font: inherit; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.big { padding: 14px 24px; font-size: 17px; margin-top: 8px; }
+.btn:focus-visible, .tab:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent-soft); outline-offset: 2px; }
+
+/* Konvertor */
+.converter { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+.pane { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.pane-title { font-weight: 600; font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+textarea, .output {
+  min-height: 220px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text); font: 17px/1.6 inherit; font-family: inherit;
+  box-shadow: var(--shadow);
+}
+textarea { resize: vertical; width: 100%; }
+.output { white-space: pre-wrap; overflow-wrap: anywhere; }
+.output:empty::before { content: "Natija şu yerda çiqadi"; color: var(--muted); }
+.output mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1px; }
+.badge { background: var(--accent-soft); color: var(--accent); border-radius: 99px; padding: 1px 8px; font-size: 13px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+
+/* Alifbo */
+.alphabet { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 10px; margin-top: 24px; }
+.letter {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 6px 10px; text-align: center; box-shadow: var(--shadow);
+}
+.letter b { display: block; font-size: 26px; line-height: 1.1; }
+.letter small { color: var(--muted); font-size: 13px; }
+.letter.new { border-color: var(--accent); background: var(--accent-soft); }
+.letter.new small { color: var(--accent); font-weight: 600; }
+
+/* Klaviatura */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 20px 0 8px; }
+.tab {
+  font: inherit; font-size: 15px; padding: 8px 14px; border-radius: 99px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--muted);
+}
+.tab[aria-selected="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+.keyboard { display: grid; gap: 6px; margin-top: 16px; overflow-x: auto; padding-bottom: 4px; }
+.row { display: flex; gap: 6px; }
+.key {
+  position: relative; flex: 0 0 auto; width: 52px; height: 52px; border-radius: 9px;
+  background: var(--surface); border: 1px solid var(--border); box-shadow: 0 2px 0 var(--border);
+  font-size: 15px;
+}
+.key .base { position: absolute; left: 8px; bottom: 5px; }
+.key .ag { position: absolute; right: 7px; top: 4px; font-size: 13px; color: var(--altgr); font-weight: 700; }
+.key.new { background: var(--accent-soft); border-color: var(--accent); }
+.key.new .base { color: var(--accent); font-weight: 800; font-size: 19px; }
+.key.wide { width: 80px; color: var(--muted); font-size: 12px; }
+.key.wider { width: 100px; color: var(--muted); font-size: 12px; }
+.legend { display: flex; gap: 20px; list-style: none; padding: 0; margin: 16px 0 0; color: var(--muted); font-size: 14px; }
+.legend li { display: flex; align-items: center; gap: 8px; }
+.k { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 6px; font-weight: 700; }
+.k-new { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+.k-altgr { background: var(--altgr-soft); color: var(--altgr); }
+
+/* Imkoniyatlar */
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 24px; }
+.feature { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); }
+.feature p { margin: 0; color: var(--muted); font-size: 15px; }
+code { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 5px; padding: 0 5px; font-size: .92em; }
+kbd { border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; padding: 0 6px; background: var(--surface); font-size: .9em; }
+
+/* Yuklab olish */
+.download { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+.steps { margin: 0; padding-left: 20px; color: var(--muted); }
+.steps li { margin-bottom: 10px; }
+
+.foot { border-top: 1px solid var(--border); padding: 24px 0; color: var(--muted); font-size: 14px; }
+
+@media (max-width: 760px) {
+  nav a:not(.nav-cta) { display: none; }
+  .converter, .download { grid-template-columns: 1fr; }
+  .hero { padding: 48px 0 40px; }
+  .key { width: 40px; height: 44px; }
+  .key.wide { width: 56px; }
+  .key.wider { width: 70px; }
+}
