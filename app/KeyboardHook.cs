@@ -22,13 +22,25 @@ namespace UzKlaviatura
 
         public bool Enabled = true;
         public bool OnlyUzbekLayout = true;
+        public HashSet<string> ExcludedApps = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        // Oxirgi marta yozilgan dastur ("notepad.exe"): tray menyusidagi "şu dasturda öçiriş" uchun.
+        public string LastAppName { get; private set; }
+
+        // Almashtirilgan yangi harf ("ş", "ʼa" ...) — örganiş rejimi uchun.
+        public event Action<string> Converted;
+
+        static readonly HashSet<string> ShellApps = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            { "explorer.exe", "shellhost.exe", "searchhost.exe", "startmenuexperiencehost.exe", "shellexperiencehost.exe" };
 
         readonly TypingEngine engine = new TypingEngine();
         readonly HookProc keyboardProc, mouseProc;   // GC yig'ib olmasligi uchun maydonda
         readonly HashSet<uint> swallowedKeys = new HashSet<uint>();
         readonly bool selfElevated;
+        readonly int selfPid = Process.GetCurrentProcess().Id;
         IntPtr keyboardHook, mouseHook, lastForeground;
         bool foregroundBlocked;
+        string foregroundApp = "";
 
         public KeyboardHook()
         {
@@ -96,8 +108,11 @@ namespace UzKlaviatura
                 engine.Reset();
                 // Administrator oynasiga SendInput yetib bormaydi (UIPI): tugmani yutsak, yo'qolib qoladi.
                 foregroundBlocked = !selfElevated && IsProcessElevated(pid);
+                foregroundApp = ProcessName(pid);
+                if (pid != selfPid && foregroundApp.Length > 0 && !ShellApps.Contains(foregroundApp))
+                    LastAppName = foregroundApp;
             }
-            if (foregroundBlocked) return false;
+            if (foregroundBlocked || ExcludedApps.Contains(foregroundApp)) return false;
 
             if (Down(VK_CONTROL) || Down(VK_MENU) || Down(VK_LWIN) || Down(VK_RWIN))
             {
@@ -136,9 +151,15 @@ namespace UzKlaviatura
             return Apply(engine.OnChar(c));
         }
 
-        static bool Apply(EditAction action)
+        bool Apply(EditAction action)
         {
             if (action == null) return false;
+            // Bekor qilish ("sh" qaytishi) yangi harf bilan boshlanmaydi, shuning uchun sanalmaydi.
+            if ("şçöğʼŞÇÖĞ".IndexOf(action.Text[0]) >= 0)
+            {
+                var handler = Converted;
+                if (handler != null) handler(action.Text);
+            }
             var inputs = new List<INPUT>();
             for (int i = 0; i < action.Backspaces; i++)
             {
@@ -169,6 +190,13 @@ namespace UzKlaviatura
         }
 
         static bool Down(int vk) { return (GetAsyncKeyState(vk) & 0x8000) != 0; }
+
+        static string ProcessName(uint pid)
+        {
+            try { return Process.GetProcessById((int)pid).ProcessName.ToLowerInvariant() + ".exe"; }
+            catch (ArgumentException) { return ""; }
+            catch (InvalidOperationException) { return ""; }
+        }
 
         static bool IsProcessElevated(uint pid)
         {

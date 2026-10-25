@@ -1,7 +1,9 @@
-// Eski lotin imlosidan 2027-yilgi alifboga o'tkazish qoidalari.
-//   oʻ -> ö, gʻ -> ğ, sh -> ş, ch -> ç, harflar orasidagi apostrof -> ʼ (tutuq)
+// Eski lotin imlosidan 2027-yilgi alifboga o'tkazish qoidalari (OʻRQ-1184-son Qonun).
+//   oʻ -> ö, gʻ -> ğ, sh -> ş, ch -> ç, harflar orasidagi apostrof -> ʼ (tutuq, U+02BC)
 // Eski imlo s/h ni ajratish uchun allaqachon tutuq ishlatgan (Is'hoq, mus'haf),
 // shuning uchun "sh" har doim bitta harf deb olinadi.
+// web/imlo.js xuddi shu qoidalarni takrorlaydi; ikkalasi tests/imlo-cases.tsv bilan tekshiriladi.
+using System.Collections.Generic;
 using System.Text;
 
 namespace UzKlaviatura
@@ -42,8 +44,25 @@ namespace UzKlaviatura
 
         public static string Convert(string text)
         {
-            if (string.IsNullOrEmpty(text)) return text;
+            int[] map;
+            int changes;
+            return Convert(text, out map, out changes);
+        }
+
+        // sourceIndex[j] — natijadagi j-belgi asl matnning qaysi belgisidan boshlangan.
+        // Word hujjatlarida matn bir necha formatlash bo'lagiga bo'lingan bo'lishi mumkin;
+        // shu xarita orqali har bir yangi harf o'z bo'lagiga qaytariladi.
+        public static string Convert(string text, out int[] sourceIndex, out int changes)
+        {
+            changes = 0;
+            if (string.IsNullOrEmpty(text))
+            {
+                sourceIndex = new int[0];
+                return text;
+            }
+
             var sb = new StringBuilder(text.Length);
+            var map = new List<int>(text.Length);
             int i = 0;
             while (i < text.Length)
             {
@@ -55,7 +74,7 @@ namespace UzKlaviatura
                     string token = text.Substring(i, end - i);
                     if (token.Contains("://") || token.Contains("@") || token.StartsWith("www.", System.StringComparison.OrdinalIgnoreCase))
                     {
-                        sb.Append(token);
+                        for (int k = i; k < end; k++) { sb.Append(text[k]); map.Add(k); }
                         i = end;
                         continue;
                     }
@@ -78,21 +97,27 @@ namespace UzKlaviatura
                     if (ok)
                     {
                         sb.Append(combined);
+                        map.Add(i);
+                        changes++;
                         i += 2;
                         continue;
                     }
                 }
 
-                if (IsApostrophe(c) && prevLetter && char.IsLetter(next))
+                if (IsApostrophe(c) && c != Tutuq && prevLetter && char.IsLetter(next))
                 {
                     sb.Append(Tutuq);
+                    map.Add(i);
+                    changes++;
                     i++;
                     continue;
                 }
 
                 sb.Append(c);
+                map.Add(i);
                 i++;
             }
+            sourceIndex = map.ToArray();
             return sb.ToString();
         }
     }

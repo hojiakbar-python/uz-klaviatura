@@ -14,17 +14,17 @@ function Run([string]$what, [scriptblock]$cmd) {
 Run 'Klaviatura DLL' { cmd /c "`"$root\layout\build.cmd`"" }
 
 Run 'Test: tartib (x64)' {
-    & $csc /nologo /platform:x64 /out:"$build\tests\LayoutTest64.exe" "$root\tests\LayoutTest.cs"
+    & $csc /nologo /codepage:65001 /platform:x64 /out:"$build\tests\LayoutTest64.exe" "$root\tests\LayoutTest.cs"
     & "$build\tests\LayoutTest64.exe" "$build\layout\x64\KBDUZ27.DLL" main | Select-Object -Last 1
     & "$build\tests\LayoutTest64.exe" "$build\layout\x64\KBDUZ27U.DLL" us | Select-Object -Last 1
 }
 Run 'Test: tartib (WOW64)' {
-    & $csc /nologo /platform:x86 /out:"$build\tests\LayoutTest32.exe" "$root\tests\LayoutTest.cs"
+    & $csc /nologo /codepage:65001 /platform:x86 /out:"$build\tests\LayoutTest32.exe" "$root\tests\LayoutTest.cs"
     & "$build\tests\LayoutTest32.exe" "$build\layout\wow64\KBDUZ27.DLL" main | Select-Object -Last 1
     & "$build\tests\LayoutTest32.exe" "$build\layout\wow64\KBDUZ27U.DLL" us | Select-Object -Last 1
 }
 Run 'Test: imlo qoidalari' {
-    & $csc /nologo /out:"$build\tests\EngineTests.exe" "$root\tests\EngineTests.cs" "$root\app\Imlo.cs" "$root\app\TypingEngine.cs"
+    & $csc /nologo /codepage:65001 /out:"$build\tests\EngineTests.exe" "$root\tests\EngineTests.cs" "$root\app\Imlo.cs" "$root\app\TypingEngine.cs"
     & "$build\tests\EngineTests.exe" "$root\tests\imlo-cases.tsv" | Select-Object -Last 1
     if ($LASTEXITCODE -ne 0) { return }
     node "$root\tests\imlo.test.js"
@@ -32,18 +32,25 @@ Run 'Test: imlo qoidalari' {
 
 Run 'Test: SendInput tuzilmasi' {
     foreach ($plat in 'x64', 'x86') {
-        & $csc /nologo /platform:$plat /out:"$build\tests\InputStructTests_$plat.exe" "$root\tests\InputStructTests.cs" `
+        & $csc /nologo /codepage:65001 /platform:$plat /out:"$build\tests\InputStructTests_$plat.exe" "$root\tests\InputStructTests.cs" `
             "$root\app\KeyboardHook.cs" "$root\app\TypingEngine.cs" "$root\app\Imlo.cs"
         & "$build\tests\InputStructTests_$plat.exe" | Select-Object -Last 1
         if ($LASTEXITCODE -ne 0) { return }
     }
 }
 
+$zipRefs = '/r:System.IO.Compression.dll', '/r:System.IO.Compression.FileSystem.dll'
+Run 'Test: fayllarni o''tkazish' {
+    & $csc /nologo /codepage:65001 @zipRefs /out:"$build\tests\FileConverterTests.exe" "$root\tests\FileConverterTests.cs" `
+        "$root\app\FileConverter.cs" "$root\app\Imlo.cs"
+    & "$build\tests\FileConverterTests.exe" | Select-Object -Last 1
+}
+
 Run 'Belgi' { & "$root\installer\make-icon.ps1" -Out "$build\icon.ico"; $global:LASTEXITCODE = 0 }
 
 Run 'Ilova' {
-    & $csc /nologo /target:winexe /platform:anycpu /optimize+ /win32icon:"$build\icon.ico" `
-        /out:"$build\app\AlifboYordamchi.exe" /r:System.Windows.Forms.dll /r:System.Drawing.dll "$root\app\*.cs"
+    & $csc /nologo /codepage:65001 /target:winexe /platform:anycpu /optimize+ /win32icon:"$build\icon.ico" `
+        /out:"$build\app\AlifboYordamchi.exe" /r:System.Windows.Forms.dll /r:System.Drawing.dll @zipRefs "$root\app\*.cs"
 }
 
 $iscc = @("${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe", "$env:ProgramFiles\Inno Setup 6\ISCC.exe",
