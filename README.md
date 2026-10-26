@@ -11,8 +11,9 @@
   - istisno dasturlar röyxati (öyinlar, kod muharrirlari...);
   - fayllarni ommaviy ögiriş: .docx (formatlaş saqlanadi), .txt, .md, .csv, .srt;
   - statistika va maslahatlar (örganiş rejimi).
-- **Veb-sayt** (`web/`): onlayn konvertor, alifbo, klaviatura sxemasi. Server kerak emas —
-  `build\site\` papkasini GitHub Pages'ga yuklaş kifoya.
+- **Veb-sayt** (`web/`): onlayn konvertor, alifbo, klaviatura sxemasi.
+  https://hojiakbar-python.github.io/uz-klaviatura/ — `main` ga push qilinganda GitHub Actions özi joylaydi.
+  Örnatuvçi [Releases](https://github.com/hojiakbar-python/uz-klaviatura/releases) da.
 - **Örnatuvçi** (`installer/`): Inno Setup 6.
 
 Imlo qoidalari ikki joyda bor (`app/Imlo.cs` va `web/imlo.js`) va ikkalasi `tests/imlo-cases.tsv`

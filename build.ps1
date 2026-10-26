@@ -63,8 +63,6 @@ Run "O'rnatuvchi" { & $iscc /Q "$root\installer\setup.iss" }
 $setup = Get-ChildItem "$root\dist\*-setup.exe" | Sort-Object LastWriteTime | Select-Object -Last 1
 Write-Host "Tayyor: $($setup.FullName)" -ForegroundColor Green
 
-# Sayt: web\ + oxirgi o'rnatuvchi -> build\site\ (GitHub Pages'ga shu papka yuklanadi)
-Remove-Item -Recurse -Force "$build\site" -ErrorAction SilentlyContinue
-Copy-Item -Recurse "$root\web" "$build\site"
-Copy-Item $setup.FullName "$build\site\UzKlaviatura-setup.exe"
-Write-Host "Sayt: $build\site" -ForegroundColor Green
+# Sayt GitHub Actions orqali web\ dan joylanadi (.github/workflows/pages.yml).
+# O'rnatuvchi Releases'ga "UzKlaviatura-setup.exe" nomi bilan yuklanadi — saytdagi havola shu nomga qaraydi.
+Write-Host "Reliz: gh release create v<versiya> `"$($setup.FullName)#UzKlaviatura-setup.exe`"" -ForegroundColor Green

@@ -1,0 +1,37 @@
+# web/ papkasini GitHub Pages'ga joylaydi. setup.exe saytda emas, Releases'da turadi.
+name: Sayt
+
+on:
+  push:
+    branches: [main]
+    paths: ['web/**', 'tests/imlo-cases.tsv', 'tests/imlo.test.js', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Konvertor testlari
+        run: node tests/imlo.test.js
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - id: deployment
+        uses: actions/deploy-pages@v4
