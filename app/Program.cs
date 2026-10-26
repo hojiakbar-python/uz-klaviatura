@@ -12,7 +12,8 @@ namespace UzKlaviatura
 {
     static class Program
     {
-        public const string Version = "0.2.0";
+        public const string Version = "0.2.1";
+        const string ShowEventName = @"Local\UzKlaviatura.ShowSettings";
 
         static Settings settings;
         static KeyboardHook hook;
@@ -29,7 +30,18 @@ namespace UzKlaviatura
             bool created;
             using (var mutex = new Mutex(true, @"Local\UzKlaviatura.Yordamchi", out created))
             {
-                if (!created) return;   // allaqachon ishlayapti
+                if (!created)
+                {
+                    // Allaqachon ishlayapti: jim yopilib qolmasdan, ishlab turgan nusxaga oynani ochishni aytamiz.
+                    // Aks holda Start menyusidagi yorliq "hech narsa qilmaydi" bo'lib ko'rinadi.
+                    if (!args.Contains("--autostart"))
+                    {
+                        EventWaitHandle show;
+                        if (EventWaitHandle.TryOpenExisting(ShowEventName, out show))
+                            using (show) show.Set();
+                    }
+                    return;
+                }
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -75,7 +87,16 @@ namespace UzKlaviatura
                 tray = new NotifyIcon { ContextMenuStrip = menu, Visible = true };
                 tray.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) SetEnabled(!settings.Enabled); };
                 UpdateUi();
-                if (args.Contains("--settings")) ShowSettings(SettingsForm.TabGeneral);
+
+                var showEvent = new EventWaitHandle(false, EventResetMode.AutoReset, ShowEventName);
+                ThreadPool.RegisterWaitForSingleObject(showEvent,
+                    (state, timedOut) => ui.Post(_ => ShowSettings(SettingsForm.TabGeneral), null), null, -1, false);
+
+                // 0.2.0 avtoishga tushirishni belgisiz yozgan edi: har yuklanishda oyna ochilmasin.
+                if (Settings.AutoStart) Settings.AutoStart = true;
+
+                // Windows bilan birga ishga tushganda jim turadi; qo'lda ochilganda oyna ko'rsatiladi.
+                if (!args.Contains("--autostart")) ShowSettings(SettingsForm.TabGeneral);
 
                 Application.Run();
 

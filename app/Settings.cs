@@ -71,7 +71,7 @@ namespace UzKlaviatura
             {
                 using (var key = Registry.CurrentUser.CreateSubKey(RunKeyPath))
                 {
-                    if (value) key.SetValue(RunValue, "\"" + Application.ExecutablePath + "\"");
+                    if (value) key.SetValue(RunValue, "\"" + Application.ExecutablePath + "\" --autostart");
                     else key.DeleteValue(RunValue, false);
                 }
             }

@@ -2,7 +2,7 @@
 ; build.ps1 orqali yig'iladi (avval build\ papkasi tayyorlanadi).
 
 #define AppName "Özbek klaviaturasi (yangi alifbo)"
-#define AppVersion "0.2.0"
+#define AppVersion "0.2.1"
 #define AppExe "AlifboYordamchi.exe"
 #define LayoutsKey "SYSTEM\CurrentControlSet\Control\Keyboard Layouts"
 
@@ -51,11 +51,11 @@ Root: HKLM; Subkey: "{#LayoutsKey}\a0010443"; ValueType: string; ValueName: "Lay
 ; Avtoishga tushirish foydalanuvchiniki: sozlamalar oynasidan administratorsiz o'chiriladi.
 ; 0.1.x versiyalar HKLM'ga yozgan edi — o'sha qiymat olib tashlanadi.
 Root: HKLM; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueName: "UzKlaviatura"; Flags: deletevalue
-Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "UzKlaviatura"; ValueData: """{app}\{#AppExe}"""; Tasks: autostart; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "UzKlaviatura"; ValueData: """{app}\{#AppExe}"" --autostart"; Tasks: autostart; Flags: uninsdeletevalue
 
 [Icons]
+; Yorliq har doim sozlamalar oynasini ochadi (dastur ishlab turgan bo'lsa ham).
 Name: "{group}\Yangi alifbo yordamçisi"; Filename: "{app}\{#AppExe}"
-Name: "{group}\Yordamçi sozlamalari"; Filename: "{app}\{#AppExe}"; Parameters: "--settings"
 
 [Run]
 ; Til ro'yxati har bir foydalanuvchiniki, shuning uchun administrator emas, o'rnatgan odam nomidan.

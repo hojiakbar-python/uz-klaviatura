@@ -109,6 +109,12 @@ namespace UzKlaviatura
                 AutoSize = true, MaximumSize = new Size(540, 0), Margin = new Padding(0, 22, 0, 0), ForeColor = SystemColors.GrayText,
                 Text = "Maslahat: almaştiriş kerak bölmagan sözda (masalan inglizça «shop») darhol Backspace bosing — «sh» qaytadi."
             });
+            flow.Controls.Add(new Label
+            {
+                AutoSize = true, MaximumSize = new Size(540, 0), Margin = new Padding(0, 12, 0, 0), ForeColor = SystemColors.GrayText,
+                Text = "Bu oynani yopsangiz ham yordamçi işlayveradi: soat yonidagi yaşil «Ş» belgisi (körinmasa — ^ tugmasini bosing). " +
+                       "Oynani qayta oçiş uçun Start menyusidan «Yangi alifbo yordamçisi» ni tanlang."
+            });
             page.Controls.Add(flow);
             return page;
         }
