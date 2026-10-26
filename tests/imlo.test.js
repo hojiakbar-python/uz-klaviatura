@@ -15,5 +15,17 @@ for (const line of lines) {
     console.log(`XATO ${JSON.stringify(input)} -> ${JSON.stringify(actual)} (kutilgan: ${JSON.stringify(expected)})`);
   }
 }
+// Sayt matnlari lotincha: tasodifan kirgan kirill harfi (masalan "е") ko'rinmaydi, lekin qidiruvni buzadi.
+const webDir = path.join(__dirname, '..', 'web');
+for (const file of fs.readdirSync(webDir)) {
+  const text = fs.readFileSync(path.join(webDir, file), 'utf8');
+  const m = /[Ѐ-ӿ]/.exec(text);
+  total++;
+  if (m) {
+    failures++;
+    console.log(`XATO web/${file}: kirill harfi ${JSON.stringify(text.slice(Math.max(0, m.index - 15), m.index + 5))}`);
+  }
+}
+
 console.log(failures === 0 ? `Hammasi to'g'ri (${total} ta).` : `${failures} ta xato.`);
 process.exit(failures === 0 ? 0 : 1);
