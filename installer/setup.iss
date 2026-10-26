@@ -26,11 +26,16 @@ WizardStyle=modern
 Compression=lzma2
 SolidCompression=yes
 CloseApplications=force
+; Avtoishga tushirish HKCU'ga yoziladi. UAC odatda o'sha foydalanuvchining o'zini ko'taradi;
+; boshqa administrator hisobi bilan o'rnatilsa, foydalanuvchi uni sozlamalar oynasidan yoqadi.
+UsedUserAreasWarning=no
 
 [Languages]
 Name: "uz"; MessagesFile: "compiler:Default.isl,Uzbek.isl"
 
 [Tasks]
+; Ikkalasi ham standart holatda belgilangan.
+Name: "desktopicon"; Description: "Iş stolida yorliq yaratiş"; GroupDescription: "Qöşimça:"
 Name: "autostart"; Description: "Yordamçini Windows bilan birga işga tuşiriş"; GroupDescription: "Qöşimça:"
 
 [Files]
@@ -56,6 +61,7 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 [Icons]
 ; Yorliq har doim sozlamalar oynasini ochadi (dastur ishlab turgan bo'lsa ham).
 Name: "{group}\Yangi alifbo yordamçisi"; Filename: "{app}\{#AppExe}"
+Name: "{autodesktop}\Yangi alifbo yordamçisi"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
 
 [Run]
 ; Til ro'yxati har bir foydalanuvchiniki, shuning uchun administrator emas, o'rnatgan odam nomidan.
