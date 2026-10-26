@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -12,7 +13,7 @@ namespace UzKlaviatura
 {
     static class Program
     {
-        public const string Version = "0.2.1";
+        public const string Version = "0.2.2";
         const string ShowEventName = @"Local\UzKlaviatura.ShowSettings";
 
         static Settings settings;
@@ -23,6 +24,9 @@ namespace UzKlaviatura
         static SettingsForm settingsForm;
         static ToolStripMenuItem enabledItem, appItem;
         static Icon iconOn, iconOff;
+
+        [DllImport("user32.dll")]
+        static extern bool SetProcessDPIAware();
 
         [STAThread]
         static void Main(string[] args)
@@ -43,6 +47,8 @@ namespace UzKlaviatura
                     return;
                 }
 
+                // Aks holda Windows masshtablashda oynani cho'zib, matn xira ko'rinadi.
+                SetProcessDPIAware();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 var ui = new WindowsFormsSynchronizationContext();

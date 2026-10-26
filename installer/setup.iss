@@ -2,7 +2,7 @@
 ; build.ps1 orqali yig'iladi (avval build\ papkasi tayyorlanadi).
 
 #define AppName "Özbek klaviaturasi (yangi alifbo)"
-#define AppVersion "0.2.1"
+#define AppVersion "0.2.2"
 #define AppExe "AlifboYordamchi.exe"
 #define LayoutsKey "SYSTEM\CurrentControlSet\Control\Keyboard Layouts"
 
