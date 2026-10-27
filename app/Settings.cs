@@ -60,21 +60,43 @@ namespace UzKlaviatura
         }
 
         // Windows bilan birga ishga tushish (joriy foydalanuvchi uchun).
+        // Tanlov alohida saqlanadi: Run qiymati yo'qolib qolsa (tozalovchi dastur, boshqa hisobdan o'rnatish),
+        // ilova keyingi ishga tushishda uni tiklaydi. Eski versiyalarda tanlov faqat Run qiymatining o'zi edi.
         public static bool AutoStart
         {
             get
             {
-                using (var key = Registry.CurrentUser.OpenSubKey(RunKeyPath))
-                    return key != null && key.GetValue(RunValue) != null;
+                using (var key = Registry.CurrentUser.OpenSubKey(KeyPath))
+                {
+                    object v = key == null ? null : key.GetValue("AutoStart");
+                    if (v is int) return (int)v != 0;
+                }
+                return ReadRunValue() != null;
             }
             set
             {
-                using (var key = Registry.CurrentUser.CreateSubKey(RunKeyPath))
-                {
-                    if (value) key.SetValue(RunValue, "\"" + Application.ExecutablePath + "\" --autostart");
-                    else key.DeleteValue(RunValue, false);
-                }
+                using (var key = Registry.CurrentUser.CreateSubKey(KeyPath))
+                    key.SetValue("AutoStart", value ? 1 : 0, RegistryValueKind.DWord);
+                SyncAutoStart();
             }
+        }
+
+        // Run qiymatini tanlovga moslaydi; dastur boshqa papkaga ko'chgan bo'lsa yo'lni ham yangilaydi.
+        public static void SyncAutoStart()
+        {
+            string want = AutoStart ? "\"" + Application.ExecutablePath + "\" --autostart" : null;
+            if (string.Equals(ReadRunValue(), want, StringComparison.OrdinalIgnoreCase)) return;
+            using (var key = Registry.CurrentUser.CreateSubKey(RunKeyPath))
+            {
+                if (want != null) key.SetValue(RunValue, want);
+                else key.DeleteValue(RunValue, false);
+            }
+        }
+
+        static string ReadRunValue()
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(RunKeyPath))
+                return key == null ? null : key.GetValue(RunValue) as string;
         }
 
         public static string FormatHotkey(Keys keys)

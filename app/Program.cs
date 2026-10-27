@@ -13,7 +13,7 @@ namespace UzKlaviatura
 {
     static class Program
     {
-        public const string Version = "0.2.2";
+        public const string Version = "0.2.3";
         const string ShowEventName = @"Local\UzKlaviatura.ShowSettings";
 
         static Settings settings;
@@ -98,8 +98,8 @@ namespace UzKlaviatura
                 ThreadPool.RegisterWaitForSingleObject(showEvent,
                     (state, timedOut) => ui.Post(_ => ShowSettings(SettingsForm.TabGeneral), null), null, -1, false);
 
-                // 0.2.0 avtoishga tushirishni belgisiz yozgan edi: har yuklanishda oyna ochilmasin.
-                if (Settings.AutoStart) Settings.AutoStart = true;
+                // Run qiymati yo'qolgan yoki eskirgan bo'lsa tiklanadi (0.2.0 uni --autostart belgisiz yozgan edi).
+                Settings.SyncAutoStart();
 
                 // Windows bilan birga ishga tushganda jim turadi; qo'lda ochilganda oyna ko'rsatiladi.
                 if (!args.Contains("--autostart")) ShowSettings(SettingsForm.TabGeneral);
